@@ -1,0 +1,94 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+<Server port="${shutdown.port}"
+    shutdown="${shutdown.password}">
+
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+<Service name="Catalina">
+    <Executor daemon="${tomcatThreadPool1.daemon}"
+        maxIdleTime="${tomcatThreadPool1.maxIdleTime}"
+        maxQueueSize="${tomcatThreadPool1.maxQueueSize}"
+        maxThreads="${tomcatThreadPool1.maxThreads}"
+        minSpareThreads="${tomcatThreadPool1.minSpareThreads}"
+        name="tomcatThreadPool"
+        namePrefix="${tomcatThreadPool1.namePrefix}"
+        prestartminSpareThreads="${tomcatThreadPool1.prestartminSpareThreads}"
+        threadPriority="${tomcatThreadPool1.threadPriority}"
+        threadRenewalDelay="{tomcatThreadPool1.threadRenewalDelay}" />
+
+<Engine defaultHost="localhost"
+        jvmRoute="${jmvRoute}"
+        name="Catalina" >
+    <Realm cacheRemovalWarningTime="3600"
+            cacheSize="1000"
+            className="org.apache.catalina.realm.LockOutRealm"
+            failureCount="3"
+            lockOutTime="600">
+    </Realm>
+
+    <Valve allow="${allowRemoteAddr}"
+            className="org.apache.catalina.valves.RemoteAddrValve" />
+
+    <Host appBase="${appBase}"
+          autoDeploy="${autoDeploy}"
+          deployOnStartup="${deployOnStartup}"
+          deployXML="${deployXML}"
+          name="localhost"
+          unpackWARs="${unpackWARs}"
+          workDir="${workDir}"
+          xmlBase="${xmlBase}" >
+
+         <Valve className="org.apache.catalina.valves.AccessLogValve"
+                directory="${instancelogs}"
+                fileDateFormat="${accessLog.fileDateFormat}"
+                pattern="${accessLog.pattern}"
+                prefix="localhost_access_log"
+                suffix="${accessLog.suffix}" />
+        <Valve className="org.apache.catalina.valves.ErrorReportValve"
+               showReport="false"
+               showServerInfo="false" />
+    </Host>
+
+
+</Engine>
+<Connector SSLEnabled="${tomcatThreadPool1.SSLEnabled}"
+           acceptCount="${tomcatThreadPool1.acceptCount}"
+           connectionTimeout="${tomcatThreadPool1.connectionTimeout}"
+           executor="${executor}"
+           maxHttpHeaderSize="${maxHttpHeaderSize}"
+           maxKeepAliveRequests="${tomcatThreadPool1.maxKeepAliveRequests}"
+           port="${https.port}"
+           protocol="${connector.protocol}"
+           proxyName="${proxyName}"
+           proxyPort="${proxyPort}"
+           redirectPort="${https.port}"
+           scheme="${tomcatThreadPool1.scheme}"
+           secure="${tomcatThreadPool1.secure}"
+           server="${server}" >
+    <SSLHostConfig ciphers="${cipher.list}"
+                sslProtocol="${ssl.protocol}"
+                protocols="${sslEnabledProtocols}"
+                certificateVerification="${clientAuth}"
+                honorCipherOrder="${useServerCipherSuiteOrder}"
+                truststoreType="${keystore.type}"
+                truststoreFile="${truststore.file}"
+                truststorePassword="${truststore.password}"  >
+    <Certificate certificateKeyAlias="${key.alias}"
+                 certificateKeyPassword="${key.password}"
+                 certificateKeystoreFile="${keystore.file}"
+                 certificateKeystorePassword="${keystore.password}"
+                 certificateKeystoreType="${keystore.type}"  />
+    </SSLHostConfig>
+</Connector>
+</Service>
+</Server>
